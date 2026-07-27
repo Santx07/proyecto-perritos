@@ -1,0 +1,35 @@
+{
+  "processKeywords": [
+    "injector", "loader", "cheat", "bypass", "aimbot", "wallhack",
+    "esp", "unlock", "spoofer", "hwid", "trainer"
+  ],
+  "processNamesExact": [
+    "cheatengine-x86_64.exe",
+    "cheatengine-i386.exe",
+    "extremeinjector.exe",
+    "processhacker.exe"
+  ],
+  "fileFolderKeywords": [
+    "cheat", "hack", "bypass", "injector", "spoofer", "loader",
+    "trainer", "esp", "aimbot"
+  ],
+  "suspiciousExtensions": [ ".sys", ".dll", ".exe" ],
+  "scanDirectories": [
+    "%USERPROFILE%\\Desktop",
+    "%USERPROFILE%\\Downloads",
+    "%USERPROFILE%\\Documents",
+    "%APPDATA%",
+    "%LOCALAPPDATA%",
+    "%TEMP%"
+  ],
+  "registryUninstallKeywords": [
+    "cheat", "bypass", "injector", "spoofer", "hwid", "loader"
+  ],
+  "registryRunKeys": [
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+  ],
+  "serviceKeywords": [
+    "cheat", "bypass", "spoofer", "hwid", "injector"
+  ]
+}
