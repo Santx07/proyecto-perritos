@@ -1,3 +1,4 @@
+--- Program.cs (原始)
 using CheatScanner;
 using CheatScanner.Scanners;
 using CheatScanner.Report;
@@ -35,6 +36,61 @@ allFindings.AddRange(ServiceScanner.Scan(db));
 Console.WriteLine($"\nEscaneo completado. Hallazgos: {allFindings.Count}");
 
 var html = ReportGenerator.Generate(allFindings);
+var outputPath = Path.Combine(AppContext.BaseDirectory, $"reporte_{DateTime.Now:yyyyMMdd_HHmmss}.html");
+File.WriteAllText(outputPath, html);
+
+Console.WriteLine($"Reporte guardado en: {outputPath}");
+Console.WriteLine("\nPresiona una tecla para salir...");
+Console.ReadKey();
+
++++ Program.cs (修改后)
+using CheatScanner;
+using CheatScanner.Scanners;
+using CheatScanner.Report;
+
+Console.OutputEncoding = System.Text.Encoding.UTF8;
+Console.WriteLine("=== Escáner de rastros (uso personal) ===\n");
+
+var signaturesPath = Path.Combine(AppContext.BaseDirectory, "signatures.json");
+SignatureDb db;
+
+try
+{
+    db = SignatureDb.Load(signaturesPath);
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error cargando firmas: {ex.Message}");
+    return;
+}
+
+var allFindings = new List<Finding>();
+
+Console.WriteLine("[1/5] Escaneando procesos en ejecución...");
+allFindings.AddRange(ProcessScanner.Scan(db));
+
+Console.WriteLine("[2/5] Escaneando archivos y carpetas...");
+allFindings.AddRange(FileScanner.Scan(db));
+
+Console.WriteLine("[3/5] Escaneando registro de Windows (claves anormales)...");
+allFindings.AddRange(RegistryScanner.Scan(db));
+
+Console.WriteLine("[4/5] Escaneando servicios...");
+allFindings.AddRange(ServiceScanner.Scan(db));
+
+Console.WriteLine("[5/5] Verificando integridad de aplicaciones comunes...");
+allFindings.AddRange(FileIntegrityChecker.CheckCommonApplications());
+
+// Recopilar información de licencias y software
+Console.WriteLine("\nRecopilando información de software instalado...");
+var steamInfo = LicenseInfo.GetSteamLicenseKey();
+var fiveMInfo = LicenseInfo.GetFiveMInfo();
+var discordInfo = LicenseInfo.GetDiscordInfo();
+var windowsLicense = LicenseInfo.GetWindowsLicense();
+
+Console.WriteLine($"\nEscaneo completado. Hallazgos: {allFindings.Count}");
+
+var html = ReportGenerator.Generate(allFindings, steamInfo, fiveMInfo, discordInfo, windowsLicense);
 var outputPath = Path.Combine(AppContext.BaseDirectory, $"reporte_{DateTime.Now:yyyyMMdd_HHmmss}.html");
 File.WriteAllText(outputPath, html);
 
